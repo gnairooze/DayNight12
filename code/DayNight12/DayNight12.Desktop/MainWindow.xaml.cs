@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -45,6 +46,12 @@ namespace DayNight12.Desktop
         private void Timer_Tick(object sender, EventArgs e)
         {
             displayTime(DateTime.Now);
+            updateTitle();
+        }
+
+        private void updateTitle()
+        {
+            this.Title = $"{txtHour.Text}{txtMinute.Text}{txtSecond.Text} - {txtHalf.Text} {txtDate.Text} - DayNight12 {AssemblyName.GetAssemblyName(Assembly.GetExecutingAssembly().Location).Version}";
         }
 
         private void displayTime(DateTime dateTime)

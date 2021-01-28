@@ -7,9 +7,10 @@
     <PackageIcon>time-png-512x512-pixel-512.png</PackageIcon>
     <RepositoryUrl>https://github.com/gnairooze/DayNight12</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
-    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+    <FileVersion>1.0.0.2</FileVersion>
+    <Version>1.0.2</Version>
+    <ApplicationIcon>time_png_512x512_pixel_512_m6E_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
