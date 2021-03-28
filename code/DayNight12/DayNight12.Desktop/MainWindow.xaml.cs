@@ -36,6 +36,7 @@ namespace DayNight12.Desktop
         {
             setLanguage();
             setWindowSize();
+            SaveNewSettings();
             startTimer();
         }
 
@@ -78,6 +79,11 @@ namespace DayNight12.Desktop
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            SaveNewSettings();
+        }
+
+        private void SaveNewSettings()
+        {
             if (WindowState == WindowState.Maximized)
             {
                 // Use the RestoreBounds as the current values will be 0, 0 and the size of the screen
@@ -95,6 +101,8 @@ namespace DayNight12.Desktop
                 Properties.Settings.Default.Width = this.Width;
                 Properties.Settings.Default.Maximized = false;
             }
+
+            Properties.Settings.Default.Language = Properties.Settings.Default.Language;
 
             Properties.Settings.Default.Save();
         }
