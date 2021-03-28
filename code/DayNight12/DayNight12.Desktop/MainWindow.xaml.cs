@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -24,6 +25,7 @@ namespace DayNight12.Desktop
     {
         #region attributes
         private DispatcherTimer _Timer = new DispatcherTimer();
+        private Language.ILanguage _Language;
         #endregion
         public MainWindow()
         {
@@ -32,8 +34,14 @@ namespace DayNight12.Desktop
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            setLanguage();
             setWindowSize();
             startTimer();
+        }
+
+        private void setLanguage()
+        {
+            this._Language = DayNight12.Desktop.Language.LanguageHelper.GetLanguageInstance(Properties.Settings.Default.Language);
         }
 
         private void startTimer()
@@ -60,10 +68,11 @@ namespace DayNight12.Desktop
             txtMinute.Text = $"{dateTime.Minute} :";
             txtSecond.Text = dateTime.Second.ToString();
             
-            string daynight = TimeHelper.IsDay(dateTime.Hour) ? "Day" : "Night";
+            string daynight = TimeHelper.IsDay(dateTime.Hour) ? this._Language.Day : this._Language.Night;
             DateTime calculatedDate = TimeHelper.CalculateDate(dateTime);
+
+            txtHalf.Text = $"{daynight} {calculatedDate.ToString("dddd",new CultureInfo(this._Language.Culture))}";
             
-            txtHalf.Text = $"{daynight} of {calculatedDate.DayOfWeek}";
             txtDate.Text = calculatedDate.ToString("d");
         }
 
