@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace DayNight12.Desktop
@@ -24,28 +12,42 @@ namespace DayNight12.Desktop
     public partial class MainWindow : Window
     {
         #region attributes
-        private DispatcherTimer _Timer = new DispatcherTimer();
+        private readonly DispatcherTimer _Timer = new();
         private Language.ILanguage _Language;
         #endregion
         public MainWindow()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                LogException(ex);
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+        }
+
+        private static void LogException(Exception ex)
+        {
+            System.IO.File.WriteAllText("error.log", ex.ToString());
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            setLanguage();
-            setWindowSize();
+            SetLanguage();
+            SetWindowSize();
             SaveNewSettings();
-            startTimer();
+            StartTimer();
         }
 
-        private void setLanguage()
+        private void SetLanguage()
         {
             this._Language = DayNight12.Desktop.Language.LanguageHelper.GetLanguageInstance(Properties.Settings.Default.Language);
         }
 
-        private void startTimer()
+        private void StartTimer()
         {
             _Timer.Tick += new EventHandler(Timer_Tick);
             _Timer.Interval = new TimeSpan(0, 0, 1);
@@ -54,16 +56,16 @@ namespace DayNight12.Desktop
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            displayTime(DateTime.Now);
-            updateTitle();
+            DisplayTime(DateTime.Now);
+            UpdateTitle();
         }
 
-        private void updateTitle()
+        private void UpdateTitle()
         {
-            this.Title = $"{txtHour.Text}{txtMinute.Text}{txtSecond.Text} - {txtHalf.Text} {txtDate.Text} - DayNight12 {AssemblyName.GetAssemblyName(Assembly.GetExecutingAssembly().Location).Version}";
+            this.Title = $"{txtHour.Text}{txtMinute.Text}{txtSecond.Text} - {txtHalf.Text} {txtDate.Text} - DayNight12 {Assembly.GetExecutingAssembly().GetName().Version}";
         }
 
-        private void displayTime(DateTime dateTime)
+        private void DisplayTime(DateTime dateTime)
         {
             txtHour.Text = $"{TimeHelper.CalculateHour(dateTime.Hour)} :";
             txtMinute.Text = $"{dateTime.Minute} :";
@@ -74,7 +76,7 @@ namespace DayNight12.Desktop
 
             txtHalf.Text = $"{daynight} {calculatedDate.ToString("dddd",new CultureInfo(this._Language.Culture))}";
             
-            txtDate.Text = calculatedDate.ToString("d");
+            txtDate.Text = calculatedDate.ToString("yyyy-MM-dd");
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -107,7 +109,7 @@ namespace DayNight12.Desktop
             Properties.Settings.Default.Save();
         }
 
-        private void setWindowSize()
+        private void SetWindowSize()
         {
             this.Top = Properties.Settings.Default.Top;
             this.Left = Properties.Settings.Default.Left;

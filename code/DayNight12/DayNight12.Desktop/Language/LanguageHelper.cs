@@ -8,15 +8,12 @@ namespace DayNight12.Desktop.Language
     {
         public static ILanguage GetLanguageInstance(string language)
         {
-            switch (language)
+            return language switch
             {
-                case "en":
-                    return new EnglishUS();
-                case "ar":
-                    return new ArabicEgypt();
-                default:
-                    return new EnglishUS();
-            }
+                "en" => new EnglishUS(),
+                "ar" => new ArabicEgypt(),
+                _ => new EnglishUS(),
+            };
         }
     }
 }
